@@ -38,15 +38,40 @@ public class SpotifyRepository {
     }
 
     public User createUser(String name, String mobile) {
+        User newUser= new User(name,mobile);
+        users.add(newUser);
+        return newUser;
     }
 
     public Artist createArtist(String name) {
+        Artist artist= new Artist(name);
+        artists.add(artist);
+        return artist;
     }
+    public List<String> artistList(){
+        List<String> arrayList =new ArrayList<>();
+        for (Artist artist:artists){
+            arrayList.add(artist.getName());
+        }
+        return arrayList;
+    }
+
 
     public Album createAlbum(String title, String artistName) {
+        Album album= new Album(title);
+        return album;
+    }
+    public List<String> albumList() throws Exception{
+        List<String> albumList =new ArrayList<>();
+        for (Album album:albums){
+            albumList.add(album.getTitle());
+        }
+        return albumList;
     }
 
+
     public Song createSong(String title, String albumName, int length) throws Exception{
+
     }
 
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {

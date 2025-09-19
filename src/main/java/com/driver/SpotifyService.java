@@ -12,18 +12,26 @@ public class SpotifyService {
     SpotifyRepository spotifyRepository = new SpotifyRepository();
 
     public User createUser(String name, String mobile){
-
+        User user = spotifyRepository.createUser(name,mobile);
+        return user;
     }
 
     public Artist createArtist(String name) {
-
+        Artist artist=spotifyRepository.createArtist(name);
+        return artist;
     }
 
     public Album createAlbum(String title, String artistName) {
-
+        List<String>list =spotifyRepository.artistList();
+        if(!list.contains(artistName)){
+            Artist artist=createArtist(artistName);
+        }
+        Album album=spotifyRepository.createAlbum(title, artistName);
+        return album;
     }
 
     public Song createSong(String title, String albumName, int length) throws Exception {
+
 
     }
 
