@@ -158,10 +158,11 @@ public class SpotifyRepository {
 
             }
         }
+        return new Playlist();
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
-
+        return new Song();
     }
 
     public String mostPopularArtist() {
