@@ -37,8 +37,13 @@ public class SpotifyController {
     public String createSong(String title, String albumName, int length) throws Exception{
         //If the album does not exist in database, throw "Album does not exist" exception
         //Create and add the song to respective album
-        Song song =spotifyService.createSong(title, albumName, length);
-        return "Success";
+        try{
+            Song song =spotifyService.createSong(title, albumName, length);
+            return "Success";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 
     @PostMapping("/add-playlist-on-length")
@@ -46,9 +51,13 @@ public class SpotifyController {
         //Create a playlist with given title and add all songs having the given length in the database to that playlist
         //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
         //If the user does not exist, throw "User does not exist" exception
+        try{
+            Playlist playlist=spotifyService.createPlaylistOnLength(mobile,title,length);
+            return "Success";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
 
-        Playlist playlist=spotifyService.createPlaylistOnLength(mobile,title,length);
-        return "Success";
     }
 
     @PostMapping("/add-playlist-on-name")
@@ -56,8 +65,13 @@ public class SpotifyController {
         //Create a playlist with given title and add all songs having the given titles in the database to that playlist
         //The creater of the playlist will be the given user and will also be the only listener at the time of playlist creation
         //If the user does not exist, throw "User does not exist" exception
+        try{
+            Playlist playlist=spotifyService.createPlaylistOnName(mobile, title, songTitles);
+            return "Success";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
 
-        return "Success";
     }
 
     @PutMapping("/find-playlist")
@@ -67,8 +81,12 @@ public class SpotifyController {
         //If the user does not exist, throw "User does not exist" exception
         //If the playlist does not exists, throw "Playlist does not exist" exception
         // Return the playlist after updating
-
-        return "Success";
+        try{
+            Playlist playlist=spotifyService.findPlaylist(mobile, playlistTitle);
+            return "Success";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     @PutMapping("/like-song")
@@ -86,12 +104,13 @@ public class SpotifyController {
     @GetMapping("/popular-artist")
     public String mostPopularArtist(){
         //Return the artist name with maximum likes
-
+        return spotifyService.mostPopularArtist();
     }
 
     @GetMapping("/popular-song")
     public String mostPopularSong(){
         //return the song title with maximum likes
+        return spotifyService.mostPopularSong();
 
     }
 }
