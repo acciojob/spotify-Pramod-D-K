@@ -75,7 +75,6 @@ public class SpotifyRepository {
                 break;
             }
         }
-
         return song;
     }
 
@@ -127,22 +126,12 @@ public class SpotifyRepository {
     }
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
-        List<User>userList= userList();
-        User user =null;
-        for(User user2 : userList){
-            if(user2.getMobile().equals(mobile)){
-                user = user2;
-            }
-        }
+
+        User user =getUserByMobile(mobile);
         if(user ==null){
             throw new Exception("User does not exist");
         }
-        Playlist playlist=null;
-        for (Playlist playlist2 :playlists){
-            if(playlist2.getTitle().equals(playlistTitle)){
-                playlist= playlist2;
-            }
-        }
+        Playlist playlist=getPlaylistByTitle(playlistTitle);
         if(playlist==null){
             throw new Exception("Playlist does not exist");
         }
@@ -157,24 +146,12 @@ public class SpotifyRepository {
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
-        List<User>userList= users;
-        User user= null;
-        for (User user1 : userList){
-            if(user1.getMobile().equals(mobile)){
-                user=user1;
-            }
-        }
+
+        User user= getUserByMobile(mobile);
         if(user==null){
             throw new Exception("User does not exist");
         }
-
-        List<Song>songList=songs;
-        Song song=null;
-        for (Song song1:songList){
-            if(song1.getTitle().equals(songTitle)){
-                song=song1;
-            }
-        }
+        Song song=getSongByTitle(mobile);
         if(song==null){
             throw new Exception("Song does not exist");
         }
@@ -183,13 +160,37 @@ public class SpotifyRepository {
         if(userList1.contains(user)){
             return song;
         }
-
         userList1.add(user);
         songLikeMap.put(song,userList1);
         song.setLikes(song.getLikes()+1);
+
+        Album album=null;
+        for (Album album1 :albumSongMap.keySet()){
+            List<Song> songList=albumSongMap.get(album1);
+            if(songList.contains(song)){
+                album=album1;
+            }
+        }
+        if(album==null){
+            throw  new Exception(" ");
+        }
+
+        Artist artist=null;
+        for(Artist artist1 :artistAlbumMap.keySet()){
+            List<Album>albumList=artistAlbumMap.get(artist1);
+            if(albumList.contains(album)){
+                artist=artist1;
+            }
+        }
+        if(artist==null){
+            throw  new Exception(" ");
+        }
+        artist.setLikes(artist.getLikes()+1);
+
+        //public HashMap<Album, List<Song>> albumSongMap;
+       //public HashMap<Artist, List<Album>> artistAlbumMap;
+
         return song;
-
-
     }
 
     public String mostPopularArtist() {
@@ -219,6 +220,36 @@ public class SpotifyRepository {
     }
 
     ///////////////////////////////////////////methods///////////////////////////////////////////////////////////////
+
+    public  Playlist getPlaylistByTitle(String playlistTitle){
+        Playlist playlist=null;
+        for (Playlist playlist2 :playlists){
+            if(playlist2.getTitle().equals(playlistTitle)){
+                playlist= playlist2;
+            }
+        }
+        return playlist;
+    }
+    public Song getSongByTitle(String songTitle){
+        List<Song>songList=songs;
+        Song song=null;
+        for (Song song1:songList){
+            if(song1.getTitle().equals(songTitle)){
+                song=song1;
+            }
+        }
+        return song;
+    }
+    public User getUserByMobile(String mobile){
+        List<User>userList= users;
+        User user= null;
+        for (User user1 : userList){
+            if(user1.getMobile().equals(mobile)){
+                user=user1;
+            }
+        }
+        return user;
+    }
 
     public List<Artist> artistList(){
         List<Artist> List =new ArrayList<>();
