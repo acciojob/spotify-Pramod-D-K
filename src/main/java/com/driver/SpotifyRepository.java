@@ -50,13 +50,14 @@ public class SpotifyRepository {
         return artist;
     }
 
-    public Album createAlbum(String title, String artistName) {
+    public Album createAlbum(String title, String artistName) throws Exception {
         Album album= new Album(title);
         if(albums.contains(album)){
              return album;
         }
         albums.add(album);
         albumSongMap.put(album,new ArrayList<>());
+        Artist artistFound = null;
         for(Artist artist:artistAlbumMap.keySet()){
             if(artist.getName().equals(artistName)){
                 List<Album> albums1=artistAlbumMap.get(artist);
@@ -64,6 +65,10 @@ public class SpotifyRepository {
                 break;
             }
         }
+        if (artistFound == null) {
+            throw new Exception("Artist does not exist");
+        }
+        artistAlbumMap.get(artistFound).add(album);
         return album;
     }
 

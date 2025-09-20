@@ -21,7 +21,7 @@ public class SpotifyService {
         return artist;
     }
 
-    public Album createAlbum(String title, String artistName) {
+    public Album createAlbum(String title, String artistName) throws Exception{
         List<Artist>list =spotifyRepository.artistList();
         boolean isContain=false;
         for (Artist artist:list){
