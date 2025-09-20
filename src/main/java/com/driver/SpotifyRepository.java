@@ -52,6 +52,9 @@ public class SpotifyRepository {
 
     public Album createAlbum(String title, String artistName) {
         Album album= new Album(title);
+        if(albums.contains(album)){
+             return album;
+        }
         albums.add(album);
         albumSongMap.put(album,new ArrayList<>());
         for(Artist artist:artistAlbumMap.keySet()){

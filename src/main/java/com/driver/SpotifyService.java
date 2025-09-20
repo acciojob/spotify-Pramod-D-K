@@ -31,7 +31,7 @@ public class SpotifyService {
             }
         }
         if(!isContain){
-            Artist artist=createArtist(artistName);
+            createArtist(artistName);
         }
         Album album=spotifyRepository.createAlbum(title, artistName);
         return album;
