@@ -148,6 +148,7 @@ public class SpotifyRepository {
             listeners.add(user);
             playlistListenerMap.put(playlist, listeners);
         }
+        return playlist;
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
