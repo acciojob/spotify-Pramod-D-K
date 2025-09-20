@@ -151,7 +151,7 @@ public class SpotifyRepository {
         if(user==null){
             throw new Exception("User does not exist");
         }
-        Song song=getSongByTitle(mobile);
+        Song song=getSongByTitle(songTitle);
         if(song==null){
             throw new Exception("Song does not exist");
         }
