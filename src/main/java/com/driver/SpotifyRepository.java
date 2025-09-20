@@ -103,9 +103,7 @@ public class SpotifyRepository {
         return playlist;
     }
 
-    public Playlist
-
-    createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
+    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
         Playlist playlist= new Playlist(title);
         playlists.add(playlist);
         List<Song>songList=new ArrayList<>();
@@ -122,6 +120,7 @@ public class SpotifyRepository {
         for(User user: userList){
             if(user.getMobile().equals(mobile)){
                 creatorPlaylistMap.put(user,playlist);
+                playlistListenerMap.put(playlist, new ArrayList<>(Arrays.asList(user)));
                 break;
             }
         }
@@ -139,13 +138,16 @@ public class SpotifyRepository {
             throw new Exception("Playlist does not exist");
         }
         List<Playlist> userPlaylists = userPlaylistMap.getOrDefault(user, new ArrayList<>());
-        if (userPlaylists.contains(playlist)) {
-            return playlist;
+        if (!userPlaylists.contains(playlist)) {
+            userPlaylists.add(playlist);
+            userPlaylistMap.put(user, userPlaylists);
         }
 
-        userPlaylists.add(playlist);
-        userPlaylistMap.put(user, userPlaylists);
-        return playlist;
+        List<User> listeners = playlistListenerMap.getOrDefault(playlist, new ArrayList<>());
+        if (!listeners.contains(user)) {
+            listeners.add(user);
+            playlistListenerMap.put(playlist, listeners);
+        }
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
@@ -175,7 +177,7 @@ public class SpotifyRepository {
             }
         }
         if(album==null){
-            throw  new Exception(" ");
+            throw  new Exception("Album does not exist");
         }
 
         Artist artist=null;
@@ -186,7 +188,7 @@ public class SpotifyRepository {
             }
         }
         if(artist==null){
-            throw  new Exception(" ");
+            throw  new Exception("Artist does not exist");
         }
         artist.setLikes(artist.getLikes()+1);
 
