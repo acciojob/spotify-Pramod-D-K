@@ -111,6 +111,29 @@ public class SpotifyService {
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
+        List<User> userList=spotifyRepository.userList();
+        boolean isContain=false;
+        for (User user:userList){
+            if(user.getName().equals(mobile)){
+                isContain=true;
+                break;
+            }
+        }
+        if(!isContain){
+            throw new Exception("User does not exist");
+        }
+
+        List<Song> songList=spotifyRepository.songs;
+        isContain=false;
+        for (Song song :songList){
+            if(song.getTitle().equals(songTitle)){
+                isContain=true;
+                break;
+            }
+        }
+        if(!isContain){
+            throw new Exception("Song does not exist");
+        }
         return spotifyRepository.likeSong(mobile, songTitle);
     }
 

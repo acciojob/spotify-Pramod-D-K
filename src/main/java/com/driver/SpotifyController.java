@@ -97,8 +97,13 @@ public class SpotifyController {
         //If the user does not exist, throw "User does not exist" exception
         //If the song does not exist, throw "Song does not exist" exception
         //Return the song after updating
-        Song song =spotifyService.likeSong(mobile, songTitle);
-        return "Success";
+        try{
+            Song song =spotifyService.likeSong(mobile, songTitle);
+            return "Success";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 
     @GetMapping("/popular-artist")

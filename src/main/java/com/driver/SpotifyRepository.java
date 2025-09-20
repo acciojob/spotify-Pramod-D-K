@@ -37,27 +37,6 @@ public class SpotifyRepository {
         artists = new ArrayList<>();
     }
 
-    public List<Artist> artistList(){
-        List<Artist> List =new ArrayList<>();
-        for (Artist artist:artists){
-            List.add(artist);
-        }
-        return List;
-    }
-    public List<Album> albumList() throws Exception{
-        List<Album> albumList =new ArrayList<>();
-        for (Album album:albums){
-            albumList.add(album);
-        }
-        return albumList;
-    }
-    public List<User> userList(){
-        return users;
-    }
-    public List<Playlist> playlistList(){
-        return playlists;
-    }
-
     public User createUser(String name, String mobile) {
         User newUser= new User(name,mobile);
         users.add(newUser);
@@ -122,7 +101,9 @@ public class SpotifyRepository {
         return playlist;
     }
 
-    public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
+    public Playlist
+
+    createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
         Playlist playlist= new Playlist(title);
         playlists.add(playlist);
         List<Song>songList=new ArrayList<>();
@@ -147,22 +128,68 @@ public class SpotifyRepository {
 
     public Playlist findPlaylist(String mobile, String playlistTitle) throws Exception {
         List<User>userList= userList();
-        for(User user: userList){
-            if(user.getMobile().equals(mobile)){
-
+        User user =null;
+        for(User user2 : userList){
+            if(user2.getMobile().equals(mobile)){
+                user = user2;
             }
         }
-        Playlist playlist1;
-        for (Playlist playlist:playlists){
-            if(playlist.getTitle().equals(playlistTitle)){
-
+        if(user ==null){
+            throw new Exception("User does not exist");
+        }
+        Playlist playlist=null;
+        for (Playlist playlist2 :playlists){
+            if(playlist2.getTitle().equals(playlistTitle)){
+                playlist= playlist2;
             }
         }
-        return new Playlist();
+        if(playlist==null){
+            throw new Exception("Playlist does not exist");
+        }
+        List<Playlist> userPlaylists = userPlaylistMap.getOrDefault(user, new ArrayList<>());
+        if (userPlaylists.contains(playlist)) {
+            return playlist;
+        }
+
+        userPlaylists.add(playlist);
+        userPlaylistMap.put(user, userPlaylists);
+        return playlist;
     }
 
     public Song likeSong(String mobile, String songTitle) throws Exception {
-        return new Song();
+        List<User>userList= users;
+        User user= null;
+        for (User user1 : userList){
+            if(user1.getMobile().equals(mobile)){
+                user=user1;
+            }
+        }
+        if(user==null){
+            throw new Exception("User does not exist");
+        }
+
+        List<Song>songList=songs;
+        Song song=null;
+        for (Song song1:songList){
+            if(song1.getTitle().equals(songTitle)){
+                song=song1;
+            }
+        }
+        if(song==null){
+            throw new Exception("Song does not exist");
+        }
+
+        List<User> userList1 =songLikeMap.getOrDefault(song,new ArrayList<>());
+        if(userList1.contains(user)){
+            return song;
+        }
+
+        userList1.add(user);
+        songLikeMap.put(song,userList1);
+        song.setLikes(song.getLikes()+1);
+        return song;
+
+
     }
 
     public String mostPopularArtist() {
@@ -189,5 +216,28 @@ public class SpotifyRepository {
             }
         }
         return songName;
+    }
+
+    ///////////////////////////////////////////methods///////////////////////////////////////////////////////////////
+
+    public List<Artist> artistList(){
+        List<Artist> List =new ArrayList<>();
+        for (Artist artist:artists){
+            List.add(artist);
+        }
+        return List;
+    }
+    public List<Album> albumList() throws Exception{
+        List<Album> albumList =new ArrayList<>();
+        for (Album album:albums){
+            albumList.add(album);
+        }
+        return albumList;
+    }
+    public List<User> userList(){
+        return users;
+    }
+    public List<Playlist> playlistList(){
+        return playlists;
     }
 }
